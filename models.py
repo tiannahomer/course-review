@@ -3,47 +3,53 @@ from django.db import models
 
 class Course(models.Model):
     subject_code = models.CharField(max_length=4)
-    course_number = models.charField(maxlength=4)
-    course_code = subject_code + course_number
-    course_title = models.CharField
-    course_description = models.CharField
-    department = models.CharField
-    faculty = models.CharField
-    course_level = models.CharField
-    reviews_count = models.IntegerField
-    one_star_count =
-    two_star_count =
-    three_star_count =
-    four_star_count =
-    five_star_count =
-    overall_rating = models.Flo
-    difficulty_count =
-    interest_rating =
-    interest_count =
-    workload_rating =
-    workload_count = 
-    keywords = 
+    course_number = models.CharField(max_length=4)
+    course_code = models.CharField(max_length=8)
+    course_title = models.CharField(max_length=150)
+    course_name = models.CharField(max_length=150)
+    course_description = models.CharField(max_length=600)
+    department = models.CharField(max_length=100)
+    faculty = models.CharField(max_length=100)
+    course_level = models.CharField(max_length=20)
 
     class Meta:
+        db_table = 'courses'
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
 
-class Review(models.Model):
-    title = 
-    body = 
+
+class CourseReview(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='+',)
+    title = models.CharField(max_length=100)
+    body = models.TextField
+    pub_date = models.DateTimeField('date published')
+    helpful = models.IntegerField(default=0)
+    not_helpful = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'coursereviews'
+        verbose_name = 'Course Review'
+        verbose_name_plural = 'Course Reviews'
 
 
 class Department(models.Model):
-    department_id
-    department_name
-    faculty_id
+    department_id = models.CharField(max_length=10)
+    department_name = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='+',)
+    faculty_id = models.CharField(max_length=10)
+
+    class Meta:
+        db_table = 'departments'
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
+
 
 class Faculty(models.Model):
-    faculty_id
-    faculty_name
-    departments
+    faculty_id = models.CharField(max_length=10)
+    faculty_name = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='+',)
+    departments = models.CharField(max_length=100)
 
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
+    class Meta:
+        db_table = 'faculty'
+        verbose_name = 'Faculty'
+        verbose_name_plural = 'Faculties'
+
